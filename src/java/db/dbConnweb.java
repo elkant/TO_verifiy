@@ -18,15 +18,11 @@ import java.util.logging.Logger;
  *
  * @author SIXTYFOURBIT
  */
-public final class dbConnweb {
+public final class dbConnweb{
 
    public ResultSet rs0,rs, rs1, rs2, rs3, rs4;
    public Statement st0,st, st1, st2, st3, st4;
    public PreparedStatement pst,pst1,pst2,pst3,pst4;
-   String mydrive = "";
-   public static int issetdbcalled_file_exists = 2;
-   public static int issetdbcalled_exception = 2;
-   public static int issetdbcalled_wrongpword = 2;
    public  String dbsetup[] = new String[4];
    public Connection conne = null;
 
@@ -37,14 +33,7 @@ public final class dbConnweb {
        
           conne = DriverManager.getConnection("jdbc:mysql://localhost:3306/to_verifier","root", "test");
         
-       
-            URL location = dbConnweb.class.getProtectionDomain().getCodeSource().getLocation();
-
-
-            mydrive = location.getFile().substring(1, 2);
-
-                     
-
+      
                 st0 = conne.createStatement();
                 st = conne.createStatement();
                 st1 = conne.createStatement();
@@ -52,14 +41,12 @@ public final class dbConnweb {
                 st3 = conne.createStatement();
                 st4 = conne.createStatement();
                
-
-
-
-
+                
+                
         } catch (Exception ex) {
             Logger.getLogger(dbConnweb.class.getName()).log(Level.SEVERE, null, ex);
             
-            System.out.println("ERROR WHILE CONNECTING TO DATABASE. CHECK YOUR CONNECTION CREDENTIALS SETTINGS in dbConn.java");
+            System.out.println("Error "+ex);
             //error in dbase configuration 
             //call the jsp page that does configuration
         }
