@@ -115,6 +115,9 @@ public class CreateDatabases {
 "  `reffered_to_facility` varchar(25) DEFAULT NULL, " +
 "  `Transfer_out_verified` varchar(12) DEFAULT NULL, " +
 "  `Date_of_verification` varchar(12) DEFAULT NULL, " +
+"  `mail_to` varchar(255) DEFAULT NULL, " +
+"  `mail_from` varchar(252) DEFAULT NULL, " +
+"  `effective_to_date` varchar(252) DEFAULT NULL, " +
 "  `timestamp` datetime DEFAULT CURRENT_TIMESTAMP, " +
 "  PRIMARY KEY (`UID`), " +
 "  KEY `ccc_no_index` (`ccc_no`), " +
@@ -123,6 +126,8 @@ public class CreateDatabases {
 "  KEY `reffered_to_facility_index` (`reffered_to_facility`), " +
 "  KEY `Transfer_out_verified_index` (`Transfer_out_verified`), " +
 "  KEY `Date_of_verification_index` (`Date_of_verification`), " +
+"  KEY `mail_from_index` (`mail_from`), " +
+"  KEY `mail_to_index` (`mail_to`), " +
 "  KEY `timestamp_index` (`timestamp`) " +
 ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
     
