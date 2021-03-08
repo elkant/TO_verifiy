@@ -7,6 +7,9 @@ package db;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,19 +34,26 @@ public class FirstEnvironmentSetup extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-          
             
+// Here we call the main methods that check if there is any missing table and recreates the table     
              
     dbConnweb conn = new dbConnweb();
     
     CreateDatabases cd= new CreateDatabases();
     
-    cd.CreateTOSchema(conn);
-    cd.Createuserstable(conn);
-    cd.CreateOrgUnitTable(conn);
+    cd.createTOSchema(conn);
+    cd.createuserstable(conn);
+    cd.createOrgUnitTable(conn);
+    cd.createTOResultsTable(conn);
+     
+     if(conn.rs!=null){conn.rs.close();} 
+     if(conn.st!=null){conn.st.close();} 
+           
+     
+        } catch (SQLException ex) {
             
-            out.println("</html>");
+            Logger.getLogger(FirstEnvironmentSetup.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
 

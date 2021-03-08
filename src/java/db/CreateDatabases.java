@@ -19,7 +19,7 @@ public class CreateDatabases {
    
     
  
-    public String CreateTOSchema(dbConnweb conn){
+    public String createTOSchema(dbConnweb conn){
         
         String status="Completed";
         try {
@@ -37,11 +37,7 @@ public class CreateDatabases {
     
     
     
-    
-    
-    
-    
-    public String Createuserstable(dbConnweb conn){
+    public String createuserstable(dbConnweb conn){
        
         String status="Completed";
         try {
@@ -75,7 +71,7 @@ public class CreateDatabases {
         return status;
     }
     
-    public String CreateOrgUnitTable(dbConnweb conn){
+    public String createOrgUnitTable(dbConnweb conn){
      String status="Completed";
         try {
             
@@ -107,4 +103,39 @@ public class CreateDatabases {
     }
   
   
+    public String createTOResultsTable(dbConnweb conn){
+    
+        String status="";
+    try {
+    String qry="CREATE TABLE `to_verification_data` ( " +
+"  `UID` varchar(45) NOT NULL, " +
+"  `ccc_no` varchar(255) DEFAULT NULL, " +
+"  `to_date` varchar(12) DEFAULT NULL, " +
+"  `Reffered_from_facility` varchar(25) DEFAULT NULL, " +
+"  `reffered_to_facility` varchar(25) DEFAULT NULL, " +
+"  `Transfer_out_verified` varchar(12) DEFAULT NULL, " +
+"  `Date_of_verification` varchar(12) DEFAULT NULL, " +
+"  `timestamp` datetime DEFAULT CURRENT_TIMESTAMP, " +
+"  PRIMARY KEY (`UID`), " +
+"  KEY `ccc_no_index` (`ccc_no`), " +
+"  KEY `to_date_index` (`to_date`), " +
+"  KEY `Reffered_from_facility_index` (`Reffered_from_facility`), " +
+"  KEY `reffered_to_facility_index` (`reffered_to_facility`), " +
+"  KEY `Transfer_out_verified_index` (`Transfer_out_verified`), " +
+"  KEY `Date_of_verification_index` (`Date_of_verification`), " +
+"  KEY `timestamp_index` (`timestamp`) " +
+") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+    
+
+         conn.st.executeUpdate(qry);            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateDatabases.class.getName()).log(Level.SEVERE, null, ex);
+       status="Creating to Results Table failed";
+        }  
+        
+        return status;
+        
+    }
+    
 }
