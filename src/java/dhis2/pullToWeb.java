@@ -58,26 +58,18 @@ public class pullToWeb extends HttpServlet {
            }
            
         
-          //pullDataElements
-     
-          //pullOrgUnits
           
-          
-            if(datarequest.equals("pullOrgUnits")) {
-
-                out.println(dp.pullOrgUnits(dc, urm));
-            } 
-            
-            
-            
-            else if (datarequest.equals("pullDataElements")) {
-                out.println(dp.pullDataElements(dc, urm));
-            } 
-            
-        
-          
-            else  {
-                out.println("[migrateData:{'a':''}]");
+            switch (datarequest) 
+            {
+                case "pullOrgUnits":
+                    out.println(dp.pullOrgUnits(dc, urm));
+                    break;
+                case "pullDataElements":
+                    out.println(dp.pullDataElements(dc, urm));
+                    break;
+                default:
+                    out.println("[migrateData:{'a':''}]");
+                    break;
             }
           
         

@@ -523,6 +523,8 @@ var facilityname_from=null;
 var facilityname_to=null;
 var effectivetodate=null;
 var verification_complete=null;
+var mail_to=null;
+var mail_from=null;
 
 
 
@@ -541,6 +543,8 @@ facilityname_from=$("#facilityname_from").val();
 facilityname_to=$("#facilityname_to").val();
 effectivetodate=$("#effectivetodate").val();
 verification_complete=$("#verification_complete").val();
+mail_to=$("#mail_to").val();
+mail_from=$("#mail_from").val();
 
     //var user=$("#username").val(); 
     var user="dhis2";  
@@ -596,7 +600,8 @@ facilityname_from:facilityname_from,
 facilityname_to:facilityname_to,
 effectivetodate:effectivetodate,
 verification_complete:verification_complete,
-user:user
+mail_to:mail_to,
+mail_from:mail_from
 },
 dataType:'html',  
  success: function(data) {
@@ -711,11 +716,6 @@ var dbdata1="";
 
 
 
-
-
-
-
-
 //--------------------------------------------------------------------------------------------------------------------------------
 //
                                                      // appendtablecounsellordata( dbdata1 );
@@ -778,7 +778,8 @@ function appendtabledata(){
                       if(i===data.length-1)
                       {
                        tbdata+="</tbody>\n\
-       <tfoot><tr><th>Facility</th><th>Counsellor</th><th>Register no.</th><th>Serial no.</th><th>Date Tested</th><th>Age and Gender</th><th>Modality</th><th>Test Result</th><th>Linked To ART</th><th>CCC</th><th>Date Linked</th><th>Facility Linked</th><th>Reason Not Linked</th><th>Started on ART</th><th>Date Started ON ART</th><th>Facility Started ON ART</th><th>Reason Not Started ON ART</th><th>Last Updated</th><th>Edit</th></tr></tfoot></table>";
+       <tfoot>\n\
+<tr><th>Facility</th><th>Counsellor</th><th>Register no.</th><th>Serial no.</th><th>Date Tested</th><th>Age and Gender</th><th>Modality</th><th>Test Result</th><th>Linked To ART</th><th>CCC</th><th>Date Linked</th><th>Facility Linked</th><th>Reason Not Linked</th><th>Started on ART</th><th>Date Started ON ART</th><th>Facility Started ON ART</th><th>Reason Not Started ON ART</th><th>Last Updated</th><th>Edit</th></tr></tfoot></table>";
                 
                  $("#searchtablediv").html(tbdata); 
                  
@@ -907,52 +908,22 @@ function loadsaveddailydata(id,facility,openreportstab, )
     var rowid=id;    
     //populate div with respective content
     $("#rowid").val(id);
-    var mflid=mflanddates[0];
-     if(mflid==="17799"){ mflid='18087';  }
+
     
 $("#facilityname").val(mflid+"_"+facility);   
-$("#counsellor").val(counsellor);
-$("#register_no").val(register_no);
-$("#serialno").val(serialno);
-$("#enddate").val(date_tested);
-$("#age").val(age);
-$("#gender").val(gender);
-$("#modality").val(modality);
-$("#testresult").val(testresult);
-$("#linked").val(linked);
-$("#cccno").val(cccno);
-$("#linked_site").val(linked_site);
-$("#other_facility_linked").val(other_facility_linked);
-$("#reason_not_linked").val(reason_not_linked);
-$("#reason_for_death").val(reason_for_death);
-$("#other_reason_for_death").val(other_reason_for_death);
-$("#reason_for_declining").val(reason_for_declining);
-$("#other_reason_for_declining").val(other_reason_for_declining);
-$("#artstartdate").val(datestartedart);
+
 
 
    
      //$('#facilityname').select2(); 
      $('#facilityname').select2();
-     $('#counsellor').select2(); 
-   
-         $("#counsellor").css('width','100%');
-         $("#facilityname").css('width','100%');
-         $(".select2-container").css('width','100%');
-         
-     
+ 
      $("#savebutton").hide();
      
      $("#updatebutton").show();
      //$("#savenewbutton").show();
      // checkids();
-      
-      asklinkage();
-whichfacility();
-specifyFacilityLinked();
-isshowdiedordeclined();
-isshowdeclinedother();
-isshowdeadother();
+
       
       
  $('#newdatabutton').html("<i class='glyphicon glyphicon-edit'></i>Edit Data");
@@ -1012,663 +983,12 @@ function delayedrefresh()
 }
 
 
-function updateweeklydata()
-{
- //this id will be used to update the entered data
-   var id=$("#rowid").val();
-   
-   var newid="";
-  // var annualid=id.replace(/weekly/g,"annual");
-   
- //receive all the fields from the weekly data from
-//id=$("#rowid").val();
-facility=$("#facilityname").val();
-var mf=facility.split("_");
-
-counsellor=$("#counsellor").val();
-register_no=$("#register_no").val();
-serialno=$("#serialno").val();
-date_tested=$("#enddate").val();
-age=$("#age").val();
-gender=$("#gender").val();
-modality=$("#modality").val();
-testresult=$("#testresult").val();
-linked=$("#linked").val();
-cccno=$("#cccno").val();
-linked_site=$("#linked_site").val();
-other_facility_linked=$("#other_facility_linked").val();
-reason_not_linked=$("#reason_not_linked").val();
-reason_for_death=$("#reason_for_death").val();
-other_reason_for_death=$("#other_reason_for_death").val();
-reason_for_declining=$("#reason_for_declining").val();
-other_reason_for_declining=$("#other_reason_for_declining").val();
-datestartedart=$("#artstartdate").val();
-//user=$("#user").val();
-timestamp=$("#timestamp").val();
-
-newid=mf[0]+"_"+serialno+"_"+register_no+"_"+modality+""+(date_tested.replace("-","").substring(0,6));
-    
-    //var user=$("#username").val(); 
-    var user="hsdsa"; 
-   // var timestamp = $.now();
-    
-         console.log("Urefu wa CCC Number "+cccno.length); 
-    
-    var currentdate = new Date();
-    
-   var mn=""+(currentdate.getMonth()+1) ;
-    var dt=""+currentdate.getDate();
-    var hr=""+currentdate.getHours();
-    var min=""+currentdate.getMinutes();
-    var sc=""+currentdate.getSeconds();
-    if(mn.length===1){mn='0'+mn;}
-    if(dt.length===1){dt='0'+dt;}
-    if(hr.length===1){hr='0'+hr;}
-    if(min.length===1){min='0'+min;}
-    if(sc.length===1){sc='0'+sc;}
-    
-    
-    var timestamp = "" + currentdate.getFullYear() + "-"+ mn + "-"+ dt + " "+ hr+ ":" + min+ ":"+ sc;
-    
-    
-    if(user===''){user='hsdsa';}
-    
-    var syncstatus='No';  
-    
-     var id=null;
-          
-     if(facility==='')
-     {         
-  
-   alert('Select facility');
-   //$("#facilityname select:first").focus();
-   
-   $("#facilityname").css('border-color','red');
-    //$("select:first").focus();
-     }
-     
-     else if(counsellor===''||counsellor==='select  Counsellor')
-     {         
-  
-   alert('Select Counsellor');
-   //$("#facilityname select:first").focus();
-   
-   $("#counsellor").css('border-color','red');
-    //$("select:first").focus();
-     }
-     
-     else if(modality==='')
-     {         
-  
-   alert('Select Modality');
-   //$("#facilityname select:first").focus();
-   
-   $("#modality").css('border-color','red');
-    //$("select:first").focus();
-     }
-     
-//     //startdate
-//     else if (startdate==='')
-//     {
-//         
-//     alert('Select week begining date');
-//   $("#startdate").focus();    
-//     }    
-   //end date
-      else if (enddate==='')
-     {
-         
-     alert('Select Test Date');
-   $("#enddate").focus();    
-     } 
-     
-
-else if(register_no==='') { alert(' Enter  Register Number');  $('#register_no').focus(); }
-else if(serialno==='') { alert(' Enter patient  serial number');  $('#serialno').focus(); }
-else if(date_tested==='') { alert(' Select date tested');  $('#enddate').focus(); }
-else if(age==='') { alert(' Enter Age');  $('#age').focus(); }
-else if(gender==='') { alert(' Enter Gender');  $('#gender').focus(); }
-//else if(modality==='') { alert(' Select modality');  $('#modality').focus(); }
-else if(testresult==='') { alert(' Enter  test result');  $('#testresult').focus(); }
-else if(testresult==='Positive' && linked==='') { alert(' Specify if client is linked');  $('#linked').focus(); }
-
-else if(linked==='Yes' && cccno==='') { alert(' enter cccno');  $('#cccno').focus(); }
- else if(linked_site==='This Facility' && cccno.length!==11) { alert(' Ensure the ccc number is 11 digits eg 15358-01234');  $('#cccno').focus(); }
- 
- //else if(modality==='') { alert(' Select modality');  $('#modality').focus(); }
-else if(testresult==='') { alert(' Enter  test result');  $('#testresult').focus(); }
-else if(testresult==='Positive' && linked==='') { alert(' Specify if client is linked');  $('#linked').focus(); }
- else if(linked==='Yes' && datestartedart==='') { alert(' Enter date started on ART');  $('#artstartdate').focus(); }
-
-else if(date_tested!=='' && datestartedart!=='' && Date.parse(date_tested) > Date.parse(datestartedart) ) { alert(' Date started on ART cannot be less than date tested for HIV');  $('#artstartdate').focus(); }
- 
- 
-else if(linked==='Yes' && linked_site==='') { alert(' Select linked_site');  $('#linked_site').focus(); }
-else if(linked_site==='Other Facility' && other_facility_linked==='') { alert(' Specify the name of other facility linked');  $('#other_facility_linked').focus(); }
-else if(linked==='No' && reason_not_linked==='' ) { alert('Specify reason not linked');  $('#reason_not_linked').focus();  }
-else if(  reason_not_linked==='Died' && reason_for_death==='' && linked==='No') { alert('Specify reason for death');  $('#reason_for_death').focus();  }
-else if( reason_for_death==='Other natural causes' && other_reason_for_death==='' && linked==='No') { alert('Specify  other reason for death');  $('#other_reason_for_death').focus(); }
-else if(reason_not_linked==='Declined' && reason_for_declining==='' && linked==='No') { alert(' Select reason for declining');  $('#reason_for_declining').focus();  }
-else if(reason_for_declining==='Other reason' && other_reason_for_declining==='' && linked==='No') { alert(' Specify the other reason for declining');  $('#other_reason_for_declining').focus(); }
-
-   
-       else {
-           
-     var facilitynameandmfl=facility.split("_");        
-    // var startd=startdate.replace('-','');      
-     //var startd=startd.replace('-','');      
-     var endd=enddate.replace('-','');      
-     var endd=endd.replace('-','');      
-     var cns=counsellor.replace('-','');
-     var mod=modality.replace('-','');     
-         
-     var facilityname=facilitynameandmfl[1];
-            //save data to the db
- // saveweeklyupdates(id,facilitynameandmfl[1],enddate,counselorname,modality, tested,positive_tg,positive,linked_here,linked_else,declined,dead,tca,timestamp,user, syncstatus) ;
-        
-            //________________________________
-          
-     id=$("#rowid").val();
-     
-     
-  
-  //saveweeklyupdates(id,facilityname,counsellor,register_no,serialno,date_tested,age,gender,modality,testresult,linked,cccno,linked_site,other_facility_linked
-  //,reason_not_linked,reason_for_death,other_reason_for_death,reason_for_declining,other_reason_for_declining,timestamp,user, syncstatus,datestartedart) ;
-  
-  
-  
-  $.ajax({
-url:'receive_live_data',                            
-type:'get', 
-data:{
-    id:id,
-facility:facilityname,
-counselorname:counsellor,
-register_no:register_no,
-serialno:serialno,
-date_tested:date_tested,
-age:age,
-gender:gender,
-modality:modality,
-testresult:testresult,
-linked:linked,
-cccno:cccno,
-linked_site:linked_site,
-other_facility_linked:other_facility_linked,
-reason_not_linked:reason_not_linked,
-reason_for_death:reason_for_death,
-other_reason_for_death:other_reason_for_death,
-reason_for_declining:reason_for_declining,
-other_reason_for_declining:other_reason_for_declining,
-datestartedart:datestartedart,
-user:user,
-timestamp:timestamp,newid:newid
-},
-dataType:'html',  
-                    success: function(data) {
-                        
-                  $("#feedbacklabel").html(data); 
-                  
-                 $('#searchdatabutton').click();       
-        }});
-  
-  
- 
-            //
-            //________________________________
-            
-            
-            
-
-//call refressh code here
-
- //selectsearchdata();
-$("#message").show();
-$("#actiondone").html("Data Updated Successfully");
-//call the function that loads entered data
-window.scrollTo(0,0);
-console.log('weekly data updated');
-
-//$('#reportsbutton').click();
-//$('#inpatient_uptake_cmts').focus();
-//setTimeout(delayedrefresh,1800);
-//delayedrefresh();
-       }
-       
-    
-}
-   
-function saveweeklyupdates(id,facilityname,counsellor,register_no,serialno,date_tested,age,gender,modality,testresult,linked,cccno,linked_site,other_facility_linked,reason_not_linked,reason_for_death,other_reason_for_death,reason_for_declining,other_reason_for_declining,timestamp,user, syncstatus,datestartedart) {
- 
- 
- 
- 
- dailydatadb.get(id).then(function (doc) {
-        
-  //doc.age = 4;
- //alert(id);
-   if(id!=='null' && id!=='' ){
-        //doc._id=id;
-  
-doc.facility=facilityname;
-doc.counselorname=counsellor;
-doc.register_no=register_no;
-doc.serialno=serialno;
-doc.date_tested=date_tested;
-doc.age=age;
-doc.gender=gender;
-doc.modality=modality;
-doc.testresult=testresult;
-doc.linked=linked;
-doc.cccno=cccno;
-doc.linked_site=linked_site;
-doc.other_facility_linked=other_facility_linked;
-doc.reason_not_linked=reason_not_linked;
-doc.reason_for_death=reason_for_death;
-doc.other_reason_for_death=other_reason_for_death;
-doc.reason_for_declining=reason_for_declining;
-doc.other_reason_for_declining=other_reason_for_declining;
-doc.datestartedart=datestartedart;
-doc.user=user;
-doc.timestamp=timestamp;
-doc.syncstatus=syncstatus; 
-
-        
-        
-   //alert('called');
-  // put them back
-  return dailydatadb.put(doc);
-   }
-});
- 
- 
- //daily data
- 
- 
- 
- 
-} 
-    
-  
 //==================function to import data
 
 // $('#exportbutton').on('click',function() {
     $("#exportbutton").prop("disabled",false);
      $(this).removeClass('btn-lg btn-default').addClass('btn btn-success');
 //});
-
-var syncstatusarray=[];
-
-function importdata(){
-    
-    var returnedresponses=0;
-   // $('#exportbutton').on('click',function() {
-    $("#exportbutton").prop("disabled",true);
-    $("#exportbutton").removeClass('btn-lg btn-success').addClass('btn btn-default');
-
-var recordsunexported=$("#unexported").val();
-                //read db files that have not been synced
-    
-  $("#exportbutton").hide();
-  $("#exportmsg").show();
-   $("#exportresponse").append("<b><font color='orange'>Exporting data.. please wait response.</b><br/>");
-  
-  dailydatadb.allDocs({include_docs: true, descending: true}).then( function(doc) { 
- syncstatusarray=[];
-      //read where sync is 0
-	   var skipexporting=0;
-	   for(c=0;c<doc.total_rows;c++){
-               $("#exportbutton").hide();
-               $("#exportmsg").show();
-               //a variable to check if all comments are added for percents below 80 percent and not amongest the indicators that can be skipped.
-             
-            var missingcomment="";
-	   var dat={};
-	   dat=doc.rows[c];
-	     // console.log(dat.doc.facility);
-              //how to reference each column 
-              
-              var idyangu=dat.doc._id;
-		  var num=parseInt(c)-1;
-	var missingcommentid="";
-        if(dat.doc.syncstatus==="No" || dat.doc.syncstatus==="0" || dat.doc.syncstatus==="no")
-                        {
-
-           
-              var hrf=" <button class='btn-sm button-info' data-dismiss='modal' onclick=\"loadsaveddailydata('"+dat.doc._id+"','"+dat.doc.facility+"','no"+missingcommentid+"'); \"> Enter Comments</button>";
-           
-
-        
-        if(skipexporting===0){
-            
-            updatesyncstatus(dat.doc._id,'Yes');
-        
-        
-            
-             $.ajax({
-url:'receiveData',                            
-type:'get', 
-data:{
-    id:dat.doc._id,
-facility:dat.doc.facility,
-counselorname:dat.doc.counselorname,
-register_no:dat.doc.register_no,
-serialno:dat.doc.serialno,
-date_tested:dat.doc.date_tested,
-age:dat.doc.age,
-gender:dat.doc.gender,
-modality:dat.doc.modality,
-testresult:dat.doc.testresult,
-linked:dat.doc.linked,
-cccno:dat.doc.cccno,
-linked_site:dat.doc.linked_site,
-other_facility_linked:dat.doc.other_facility_linked,
-reason_not_linked:dat.doc.reason_not_linked,
-reason_for_death:dat.doc.reason_for_death,
-other_reason_for_death:dat.doc.other_reason_for_death,
-reason_for_declining:dat.doc.reason_for_declining,
-other_reason_for_declining:dat.doc.other_reason_for_declining,
-datestartedart:dat.doc.datestartedart,
-user:dat.doc.user,
-timestamp:dat.doc.timestamp
-},
-dataType:'html',  
-                    success: function(data) {
-                       
-                       returnedresponses++;
-                       
-                        $("#exportresponse").append("<b>*"+data+'</b><br/>');
-                         
-                
-                         
-                   //doc.syncstatus="Yes"; 
-   //alert('called');
-  // put them back
-                   // return dailydatadb.put(doc); 
-                   console.log(parseInt(returnedresponses)+" vs "+parseInt(recordsunexported));
-                   
-                   if(parseInt(returnedresponses)===parseInt(recordsunexported)){
-                 $("#exportbutton").show();
-                 $("#exportmsg").hide();
-                 if(returnedresponses<1000){
-                 $("#exportresponse").append("<br/>.<br/>.<br/>.<br/><b><font color='green'><b>"+returnedresponses+" records</b> completed successfully. </b>"); 
-             setTimeout(delayedrefresh,2000);
-            }
-             else {
-                      $("#exportresponse").append("<b><font color='orange'>Exporting did not complete successfully.</b>"); 
-                 
-             }
-                       
-                   }
-        
-                                        },
-                                 error:function(xhr, s, e){
-                                     
-                                     console.log("Could not export data");
-                                     
-                                     $("#exportresponse").append("<b><font color='red'>Exporting did not complete successfully  .</b>"+e); 
-                // updatesyncstatus(dat.doc._id,'No');
-                                  returnedresponses=1000;   
-                                 }       
-                        
-                         });
-            
-                        }//end of if skipp exporting === 0
-                        //for annual exports, dont sync and dont show alert
-                        else if (skipexporting!==0 && idyangu.indexOf("annual")>=0) {
-                       //dont show export failure message     
-                            
-                        }
-            else {
-                
-                
-                $("#exportresponse").append("<br/><b>NOTE:</b><font color='red'> Data for <b>"+dat.doc.facility+"</b> not uploaded due to missing comment(s) on section <b><i>"+missingcomment+"</i></b></font> "+hrf+" <br/>");
-            }
-                        }
-        
-                 
-                 
-                 //if its last loop show
-                 
-           
-                  
-             
-            if(c===(doc.total_rows-1)){
-//                  //$("#exportbutton").show();
-//                 //$("#exportmsg").hide();
-//                 $("#exportresponse").append("<b><font color='orange'>Exporting Completed.</b>");
-  
-                      }
-          	    } //end of for loop
-	 
-	
-		
-  }).then(function (){
-     // alert('export complete');
-     
-           // if(c===parseInt(doc.total_rows)){
-                
-              // for(var s=0;s<syncstatusarray.length;s++){
-//                    
-               //  updatesyncstatus(syncstatusarray[s]);
-                
-          // }
-     
-  }).catch(function (err){ console.log(err); });
-          
-  //$("#exportbutton").show();
-  //$("#exportmsg").hide();	
-   //refresh number of uninmported sites.
-   //unsynceddata()
-        
-        
-}
-
-
-
-function exportalldata(){
-    
-    var returnedresponses=0;
-   // $('#exportbutton').on('click',function() {
-    $("#exportbutton1").prop("disabled",true);
-    $("#exportbutton1").removeClass('btn-lg btn-success').addClass('btn btn-default');
-
- $("#exportbutton").prop("disabled",true);
- $("#exportbutton").removeClass('btn-lg btn-success').addClass('btn btn-default');
-
-var recordsunexported=$("#unexported").val();
-                //read db files that have not been synced
-    
-  $("#exportbutton1").hide();
-  $("#exportmsg1").show();
-   $("#exportresponse1").append("<b><font color='orange'>Exporting all data.. please wait response.</b><br/>");
-  
-  
-   $("#exportbutton").hide();
-  $("#exportmsg").show();
-   $("#exportresponse").append("<b><font color='orange'>Exporting all data.. please wait response.</b><br/>");
-  
-  
-  
-  dailydatadb.allDocs({include_docs: true, descending: true}).then( function(doc) { 
- syncstatusarray=[];
-      //read where sync is 0
-	   var skipexporting=0;
-	   for(c=0;c<doc.total_rows;c++){
-               $("#exportbutton1").hide();
-               $("#exportmsg1").show();
-               
-                  $("#exportbutton").hide();
-               $("#exportmsg").show();
-               
-               //a variable to check if all comments are added for percents below 80 percent and not amongest the indicators that can be skipped.
-             
-            var missingcomment="";
-	   var dat={};
-	   dat=doc.rows[c];
-	     // console.log(dat.doc.facility);
-              //how to reference each column 
-              
-              var idyangu=dat.doc._id;
-		  var num=parseInt(c)-1;
-	var missingcommentid="";
-        if(dat.doc.syncstatus==="No" || dat.doc.syncstatus==="0" || dat.doc.syncstatus==="no"  || dat.doc.syncstatus==='Yes')
-                        {
-
-           
-              var hrf=" <button class='btn-sm button-info' data-dismiss='modal' onclick=\"loadsaveddailydata('"+dat.doc._id+"','"+dat.doc.facility+"','no"+missingcommentid+"'); \"> Enter Comments</button>";
-           
-
-        
-        if(skipexporting===0){
-            
-            updatesyncstatus(dat.doc._id,'Yes');
-        
-        
-            
-             $.ajax({
-                         url:'receiveData',                            
-                        type:'get', 
-data:{
-
-id:dat.doc._id,
-facility:dat.doc.facility,
-counselorname:dat.doc.counselorname,
-register_no:dat.doc.register_no,
-serialno:dat.doc.serialno,
-date_tested:dat.doc.date_tested,
-age:dat.doc.age,
-gender:dat.doc.gender,
-modality:dat.doc.modality,
-testresult:dat.doc.testresult,
-linked:dat.doc.linked,
-cccno:dat.doc.cccno,
-linked_site:dat.doc.linked_site,
-other_facility_linked:dat.doc.other_facility_linked,
-reason_not_linked:dat.doc.reason_not_linked,
-reason_for_death:dat.doc.reason_for_death,
-other_reason_for_death:dat.doc.other_reason_for_death,
-reason_for_declining:dat.doc.reason_for_declining,
-other_reason_for_declining:dat.doc.other_reason_for_declining,
-datestartedart:dat.doc.datestartedart,
-user:dat.doc.user,
-timestamp:dat.doc.timestamp
-},
-dataType: 'html',  
-                    success: function(data) {
-                       
-                       returnedresponses++;
-                       
-                        $("#exportresponse1").append("<b>*"+data+'</b><br/>');
-                        $("#exportresponse").append("<b>*"+data+'</b><br/>');
-                         
-                
-                         
-                   //doc.syncstatus="Yes"; 
-   //alert('called');
-  // put them back
-                   // return dailydatadb.put(doc); 
-                   console.log(parseInt(returnedresponses)+" vs "+parseInt(doc.total_rows));
-                   
-                 if(parseInt(returnedresponses)===parseInt(doc.total_rows)){
-                 $("#exportbutton1").show();
-                 $("#exportmsg1").hide();
-                 if(returnedresponses<1000)
-            {
-             $("#exportresponse1").append("<br/>.<br/>.<br/>.<br/><b><font color='green'><b>"+returnedresponses+" records</b> completed successfully. </b>"); 
-             $("#exportresponse").append("<br/>.<br/>.<br/>.<br/><b><font color='green'><b>"+returnedresponses+" records</b> completed successfully. </b>"); 
-             setTimeout(delayedrefresh,2000);
-            }
-             else 
-             {
-             $("#exportresponse1").append("<b><font color='orange'>Exporting did not complete successfully.</b><br/>"); 
-             $("#exportresponse").append("<b><font color='orange'>Exporting did not complete successfully.</b><br/>"); 
-                 
-             }
-                       
-                   }
-        
-                                        },
-                                 error:function(xhr, s, e)
-                                 {
-                                     
-                   console.log("Could not export data");
-                                     
-                   $("#exportresponse1").append("<b><font color='red'> Exporting did not complete successfully  .</b><br/>"+e); 
-                   $("#exportresponse").append("<b><font color='red'> Exporting did not complete successfully  .</b><br/>"+e); 
-                // updatesyncstatus(dat.doc._id,'No');
-                                  returnedresponses=1000;   
-                                 }       
-                        
-                         });
-            
-                        }//end of if skipp exporting === 0
-                        //for annual exports, dont sync and dont show alert
-                        else if (skipexporting!==0 && idyangu.indexOf("annual")>=0) {
-                       //dont show export failure message     
-                            
-                        }
-            else {
-                
-                
-                $("#exportresponse1").append("<br/><b>NOTE:</b><font color='red'> Data for <b>"+dat.doc.facility+"</b> not uploaded due to missing comment(s) on section <b><i>"+missingcomment+"</i></b></font> "+hrf+" <br/>");
-                $("#exportresponse").append("<br/><b>NOTE:</b><font color='red'> Data for <b>"+dat.doc.facility+"</b> not uploaded due to missing comment(s) on section <b><i>"+missingcomment+"</i></b></font> "+hrf+" <br/>");
-            }
-                        }
-        
-                 
-                 
-                 //if its last loop show
-                 
-           
-                  
-             
-            if(c===(doc.total_rows-1)){
-//                  //$("#exportbutton").show();
-//                 //$("#exportmsg").hide();
-//                 $("#exportresponse").append("<b><font color='orange'>Exporting Completed.</b>");
-  
-                      }
-          	    } //end of for loop
-	 
-	
-		
-  }).then(function (){
-     // alert('export complete');
-     
-           // if(c===parseInt(doc.total_rows)){
-                
-              // for(var s=0;s<syncstatusarray.length;s++){
-//                    
-               //  updatesyncstatus(syncstatusarray[s]);
-                
-          // }
-     
-  }).catch(function (err){ console.log(err); });
-          
-  //$("#exportbutton").show();
-  //$("#exportmsg").hide();	
-   //refresh number of uninmported sites.
-   //unsynceddata()
-        
-        
-}
-
-
-
-
-function updatesyncstatus(id,st){
-  
-dailydatadb.get(id).then(function (doc1) {
-      console.log(id+" sync status updated");
- doc1.syncstatus=st;
- return dailydatadb.put(doc1);
- 
-});
-
-	
-    
-}//end of function
 
 
 
@@ -1906,22 +1226,17 @@ function setrowid(){
 setrowid();
 
 
-function loadmail(fieldn,inputf){
-    
-    
-    var code=$("#"+fieldn).find(':selected').data("email");
-  if(code!=='undefined'){  
-   $("#"+inputf).val(code);
-   $("#"+inputf+"l").html("<i style='color:green;'>email : "+code+"</i>");
-  }
-  else{
-       $("#"+inputf).val("No Email Adress");     
-       $("#"+inputf+"l").html("<i style='color:red;'>No email adress</i>");   
-  }
-    
-} 
 
 
+ $.ajax({
+                    url:'FirstEnvironmentSetup',                            
+                    type:'get',  
+                    dataType: 'html',  
+                    success: function(id) {
+                       
+                      console.log(" check if the DB has changed");    
+                    }
+                    });
 
 
 
